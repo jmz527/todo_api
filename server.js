@@ -155,6 +155,7 @@ module.exports = (function() {
 	router.post(`/delete_list/:id`, (req, res) => {
 
 		db.run(`DELETE FROM lists WHERE id="${req.params.id}"`)
+		db.run(`DELETE FROM todos WHERE list_ref="${req.params.id}"`)
 
 		res.jsonp({ "status": 200, "data": req.params.id })
 	})
