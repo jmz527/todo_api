@@ -31,7 +31,9 @@ module.exports = (function() {
 			} else {
 				lists.push(row);
 			}
-		}, function() { res.send(lists) })
+		}, function() {
+			res.jsonp({ "status": 200, "data": lists })
+		})
 
 	})
 
@@ -45,7 +47,7 @@ module.exports = (function() {
 			} else {
 				list = row;
 			}
-		}, function() { res.send(list) })
+		}, function() { res.jsonp({ "status": 200, "data": list }) })
 
 	})
 
@@ -59,7 +61,7 @@ module.exports = (function() {
 			} else {
 				todos.push(row);
 			}
-		}, function() { res.send(todos) })
+		}, function() { res.jsonp({ "status": 200, "data": todos }) })
 
 	})
 
@@ -74,7 +76,9 @@ module.exports = (function() {
 			} else {
 				todos.push(row);
 			}
-		}, function() { res.send(todos) })
+		}, function() {
+			res.jsonp({ "status": 200, "data": todos })
+		})
 
 	})
 
@@ -88,7 +92,7 @@ module.exports = (function() {
 			} else {
 				todo = row;
 			}
-		}, function() { res.send(todo) })
+		}, function() { res.jsonp({ "status": 200, "data": todo }) })
 	})
 
 
@@ -102,7 +106,7 @@ module.exports = (function() {
 
 		db.run(`INSERT INTO lists(id, name, todo_count) VALUES ("${newList.id}", "${newList.name}", "${newList.todo_count}");`)
 
-		res.send(newList)
+		res.jsonp({ "status": 200, "data": newList })
 	})
 
 	// post todo
@@ -117,11 +121,11 @@ module.exports = (function() {
 		db.run(`INSERT INTO todos(id, text, active, list_ref) VALUES ("${newTodo.id}", "${newTodo.text}", "${newTodo.active}", "${newTodo.list_ref}");`)
 		db.run(`UPDATE lists SET todo_count = todo_count + 1 WHERE id="${newTodo.list_ref}"`)
 
-		res.send(newTodo)
+		res.jsonp({ "status": 200, "data": newTodo })
 	})
 
-	// put list
-	router.put(`/list`, (req, res) => {
+	// update list
+	router.post(`/update_list`, (req, res) => {
 		let updatedList = {
 			id: req.body.id,
 			name: req.body.text,
@@ -130,11 +134,11 @@ module.exports = (function() {
 
 		db.run(`UPDATE lists SET name="${req.body.text}", todo_count="${req.body.count}" WHERE id="${req.body.id}"`)
 
-		res.send(updatedList)
+		res.jsonp({ "status": 200, "data": updatedList })
 	})
 
-	// put todo
-	router.put(`/todo`, (req, res) => {
+	// update todo
+	router.post(`/update_todo`, (req, res) => {
 		let updatedTodo = {
 			id: req.body.id,
 			text: req.body.text,
@@ -144,24 +148,24 @@ module.exports = (function() {
 
 		db.run(`UPDATE todos SET text="${req.body.text}", active="${req.body.active}", list_ref="${req.body.list_ref}" WHERE id="${req.body.id}"`)
 
-		res.send(updatedTodo)
+		res.jsonp({ "status": 200, "data": updatedTodo })
 	})
 
 	// delete list
-	router.delete(`/list`, (req, res) => {
+	router.post(`/delete_list/:id`, (req, res) => {
 
-		db.run(`DELETE FROM lists WHERE id="${req.body.id}"`)
+		db.run(`DELETE FROM lists WHERE id="${req.params.id}"`)
 
-		res.send(req.body.id)
+		res.jsonp({ "status": 200, "data": req.params.id })
 	})
 
 	// delete todo
-	router.delete(`/todo`, (req, res) => {
+	router.post(`/delete_todo/:id`, (req, res) => {
 
-		db.run(`DELETE FROM todos WHERE id="${req.body.id}"`)
+		db.run(`DELETE FROM todos WHERE id="${req.params.id}"`)
 		db.run(`UPDATE lists SET todo_count = todo_count - 1 WHERE id="${req.body.list_ref}"`)
 
-		res.send(req.body.id)
+		res.jsonp({ "status": 200, "data": req.params.id })
 	})
 
 
