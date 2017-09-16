@@ -32,7 +32,8 @@ module.exports = (function() {
 				lists.push(row);
 			}
 		}, function() {
-			res.jsonp({ "status": 200, "data": lists })
+			// res.jsonp({ "status": 200, "data": lists })
+			res.json(lists)
 		})
 
 	})
@@ -47,7 +48,10 @@ module.exports = (function() {
 			} else {
 				list = row;
 			}
-		}, function() { res.jsonp({ "status": 200, "data": list }) })
+		}, function() {
+			// res.jsonp({ "status": 200, "data": list })
+			res.json(list)
+		})
 
 	})
 
@@ -61,7 +65,10 @@ module.exports = (function() {
 			} else {
 				todos.push(row);
 			}
-		}, function() { res.jsonp({ "status": 200, "data": todos }) })
+		}, function() {
+			// res.jsonp({ "status": 200, "data": todos })
+			res.json(todos)
+		})
 
 	})
 
@@ -77,7 +84,8 @@ module.exports = (function() {
 				todos.push(row);
 			}
 		}, function() {
-			res.jsonp({ "status": 200, "data": todos })
+			// res.jsonp({ "status": 200, "data": todos })
+			res.json(todos)
 		})
 
 	})
@@ -92,7 +100,10 @@ module.exports = (function() {
 			} else {
 				todo = row;
 			}
-		}, function() { res.jsonp({ "status": 200, "data": todo }) })
+		}, function() {
+			// res.jsonp({ "status": 200, "data": todo })
+			res.json(todo)
+		})
 	})
 
 
@@ -106,7 +117,8 @@ module.exports = (function() {
 
 		db.run(`INSERT INTO lists(id, name, todo_count) VALUES ("${newList.id}", "${newList.name}", "${newList.todo_count}");`)
 
-		res.jsonp({ "status": 200, "data": newList })
+		// res.jsonp({ "status": 200, "data": newList })
+		res.json(newList)
 	})
 
 	// post todo
@@ -121,7 +133,8 @@ module.exports = (function() {
 		db.run(`INSERT INTO todos(id, text, active, list_ref) VALUES ("${newTodo.id}", "${newTodo.text}", "${newTodo.active}", "${newTodo.list_ref}");`)
 		db.run(`UPDATE lists SET todo_count = todo_count + 1 WHERE id="${newTodo.list_ref}"`)
 
-		res.jsonp({ "status": 200, "data": newTodo })
+		// res.jsonp({ "status": 200, "data": newTodo })
+		res.json(newTodo)
 	})
 
 	// update list
@@ -134,7 +147,8 @@ module.exports = (function() {
 
 		db.run(`UPDATE lists SET name="${req.body.text}", todo_count="${req.body.count}" WHERE id="${req.body.id}"`)
 
-		res.jsonp({ "status": 200, "data": updatedList })
+		// res.jsonp({ "status": 200, "data": updatedList })
+		res.json(updatedList)
 	})
 
 	// update todo
@@ -148,7 +162,8 @@ module.exports = (function() {
 
 		db.run(`UPDATE todos SET text="${req.body.text}", active="${req.body.active}", list_ref="${req.body.list_ref}" WHERE id="${req.body.id}"`)
 
-		res.jsonp({ "status": 200, "data": updatedTodo })
+		// res.jsonp({ "status": 200, "data": updatedTodo })
+		res.json(updatedTodo)
 	})
 
 	// delete list
@@ -157,7 +172,8 @@ module.exports = (function() {
 		db.run(`DELETE FROM lists WHERE id="${req.params.id}"`)
 		db.run(`DELETE FROM todos WHERE list_ref="${req.params.id}"`)
 
-		res.jsonp({ "status": 200, "data": req.params.id })
+		// res.jsonp({ "status": 200, "data": req.params.id })
+		res.json(req.params.id)
 	})
 
 	// delete todo
@@ -166,7 +182,8 @@ module.exports = (function() {
 		db.run(`DELETE FROM todos WHERE id="${req.params.id}"`)
 		db.run(`UPDATE lists SET todo_count = todo_count - 1 WHERE id="${req.body.list_ref}"`)
 
-		res.jsonp({ "status": 200, "data": req.params.id })
+		// res.jsonp({ "status": 200, "data": req.params.id })
+		res.json(req.params.id)
 	})
 
 

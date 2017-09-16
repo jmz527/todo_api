@@ -12,6 +12,13 @@ const routes = require(`./server.js`)
 
 api.use(logger(`dev`))
 
+
+api.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+
 // api.set(`rdts`, path.join(__dirname, `rdts`))
 
 // Setting routes
